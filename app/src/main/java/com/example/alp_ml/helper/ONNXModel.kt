@@ -71,14 +71,21 @@ class ONNXModel(context: Context) {
             Log.d("ONNXModel", "ONNXTensor info: ${probabilityTensor.info}")
             Log.d("ONNXModel", "ONNXTensor value: ${probabilityTensor.type}")
 
+            val probabilitySequence = results.get(1) as OnnxSequence
+            val probabilitySequenceValue = probabilitySequence.value[0].value as Map<*, *>
+            Log.d("ONNXModel", "ONNXSequence info: ${probabilitySequence.info}")
+            Log.d("ONNXModel", "ONNXSequence value: $probabilitySequenceValue")
+            Log.d("ONNXModel", "ONNXSequence value: ${probabilitySequenceValue[2L]}")
+
             val floatBuffer = probabilityTensor.longBuffer
             if (floatBuffer == null) {
                 Log.e("ONNXModel", "Float buffer is null")
                 return null
             }
-
-            val size = floatBuffer.remaining()
-            val output = FloatArray(size) { floatBuffer.get().toFloat() }
+            
+            val output = FloatArray(2) // Assuming size is 2 for storing both values
+            output[0] = floatBuffer.get().toFloat() // Store first value
+            output[1] = probabilitySequenceValue[2L] as Float
 
             Log.d("ONNXModel", "Probabilities: ${output.contentToString()}")
 

@@ -29,7 +29,7 @@ fun AppNavigation(navController: NavHostController) {
                 questions = QuestionRepository.questions,
                 onSubmit = { answers, predictionResult ->
                     println("Submitted answers: $answers")
-                    Log.d("Prediction Result", "Prediction result in Navigation $predictionResult")
+                    Log.d("Prediction Result", "Prediction result in Navigation ${predictionResult.contentToString()}")
 
                     // Convert the FloatArray to a comma-separated string
                     val resultString = predictionResult?.joinToString(",") ?: ""

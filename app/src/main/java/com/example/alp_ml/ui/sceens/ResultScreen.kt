@@ -1,5 +1,6 @@
 package com.example.alp_ml.ui.sceens
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,6 +22,7 @@ import com.example.alp_ml.ui.theme.continue_col
 import com.example.alp_ml.ui.theme.heading_col
 import com.example.alp_ml.ui.theme.tiro_telugu
 
+@SuppressLint("DefaultLocale")
 @Composable
 fun ResultScreen(navController: NavController, result: FloatArray) {
     MaterialTheme {
@@ -59,7 +61,7 @@ fun ResultScreen(navController: NavController, result: FloatArray) {
                 ) {
                     Column {
                         Text(
-                            text = when (result.contentToString()) {"[2.0]"->"You have\nhigh chance\nof diabetes"; else -> "You have\nlow chance\nof diabetes"},
+                            text = "${String.format("%.2f", result[1] * 100)}% chance of Diabetes",
                             fontSize = 36.sp,
                             fontWeight = FontWeight.Medium,
                             fontFamily = tiro_telugu,
@@ -70,7 +72,18 @@ fun ResultScreen(navController: NavController, result: FloatArray) {
                             lineHeight = 48.sp
                         )
                         Text(
-                            text = when (result.contentToString()) {"[2.0]"->"You may want to seek medical treatments from professionals"; else -> "Keep yourself healthy"},
+                            text = when (result[0]) {2.0f->"You have\nhigh chance\nof diabetes"; else -> "You have\nlow chance\nof diabetes"},
+                            fontSize = 36.sp,
+                            fontWeight = FontWeight.Medium,
+                            fontFamily = tiro_telugu,
+                            color = Color.White,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 64.dp, top = 48.dp),
+                            lineHeight = 48.sp
+                        )
+                        Text(
+                            text = when (result[0]) {2.0f->"You may want to seek medical treatments from professionals"; else -> "Keep yourself healthy"},
                             fontSize = 15.sp,
                             fontWeight = FontWeight.Medium,
                             fontFamily = tiro_telugu,
