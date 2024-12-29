@@ -1,28 +1,46 @@
 package com.example.alp_ml.ui.sceens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.alp_ml.ui.components.*
 import com.example.alp_ml.model.Question
 import com.example.alp_ml.model.Type
-import com.example.alp_ml.repositories.QuestionRepository
+import com.example.alp_ml.ui.components.BooleanInput
+import com.example.alp_ml.ui.components.DecimalInput
+import com.example.alp_ml.ui.components.NavigationButton
+import com.example.alp_ml.ui.components.ScaleInput
 import com.example.alp_ml.ui.theme.background_col
 import com.example.alp_ml.ui.theme.heading_col
 import com.example.alp_ml.ui.theme.tiro_telugu
 import com.example.alp_ml.utils.ValidationUtils
+import com.example.alp_ml.viewmodel.FormViewModel
 
 @Composable
 fun FormScreen(
     questions: List<Question>,
-    onSubmit: (List<Question>) -> Unit
+    viewModel: FormViewModel,
+    onSubmit: (List<Question>, FloatArray?) -> Unit
 ) {
     // State to hold the current step (page) in the form
     var currentStep by remember { mutableIntStateOf(0) }
@@ -33,6 +51,9 @@ fun FormScreen(
     // State to hold validation error messages
     val validationError = remember { mutableStateOf<String?>(null) }
 
+    // State for loading and submission
+    var isLoading by remember { mutableStateOf(false) }
+
     // Initialize answers list with null values if empty
     if (answers.isEmpty()) {
         questions.forEach { _ -> answers.add(null) }
@@ -40,6 +61,9 @@ fun FormScreen(
 
     // Get the current question for this step
     val currentQuestion = questions.getOrNull(currentStep)
+
+    // Observe prediction result
+    val predictionResult by viewModel.predictionResult.collectAsState()
 
     MaterialTheme {
         Column(
@@ -136,37 +160,53 @@ fun FormScreen(
                 // Show "Next" or "Submit" button
                 if (currentStep == questions.size - 1) {
                     NavigationButton(
-                        text = "Submit",
+                        text = if (isLoading) "Loading..." else "Submit",
                         modifier = Modifier.weight(1f),
                         onClick = {
-                            if (validateAnswer(currentQuestion, answers[currentStep], validationError)) {
-                                onSubmit(questions.mapIndexed { _, question ->
-                                    question.copy(
-                                        id = question.id,
-                                        questionText = question.questionText,
-                                        questionDetail = question.questionDetail,
-                                        type = question.type,
-                                        options = question.options,
-                                    )
-                                })
+                            if (validateAnswer(
+                                    currentQuestion,
+                                    answers[currentStep],
+                                    validationError
+                                )
+                            ) {
+                                // Convert answers to FloatArray for prediction
+                                val inputData = viewModel.convert(answers)
+                                print("input data converted: $inputData")
+
+                                // Trigger prediction
+                                isLoading = true
+                                viewModel.predict(inputData)
                             }
-                        }
+                        },
+                        enabled = !isLoading // Disable the button if loading
                     )
                 } else {
                     NavigationButton(
                         text = "Next",
                         modifier = Modifier.weight(1f),
                         onClick = {
-                            if (validateAnswer(currentQuestion, answers[currentStep], validationError)) {
+                            if (validateAnswer(
+                                    currentQuestion,
+                                    answers[currentStep],
+                                    validationError
+                                )
+                            ) {
                                 currentStep++
                             }
                         }
                     )
                 }
             }
+
+            // Auto-submit once prediction is done
+            if (predictionResult != null && isLoading) {
+                isLoading = false
+                onSubmit(questions, predictionResult)
+            }
         }
     }
 }
+
 
 
 private fun validateAnswer(
@@ -184,8 +224,13 @@ private fun validateAnswer(
                 true
             }
         }
+
         Type.BOOLEAN -> {
-            if (!ValidationUtils.validateBooleanInput(answer ?: "", question.options ?: emptyList())) {
+            if (!ValidationUtils.validateBooleanInput(
+                    answer ?: "",
+                    question.options ?: emptyList()
+                )
+            ) {
                 validationError.value = "Please select a valid option."
                 false
             } else {
@@ -193,8 +238,13 @@ private fun validateAnswer(
                 true
             }
         }
+
         Type.SCALE -> {
-            if (!ValidationUtils.validateScaleInput(answer ?: "", question.options ?: emptyList())) {
+            if (!ValidationUtils.validateScaleInput(
+                    answer ?: "",
+                    question.options ?: emptyList()
+                )
+            ) {
                 validationError.value = "Please select a valid option."
                 false
             } else {
@@ -202,6 +252,7 @@ private fun validateAnswer(
                 true
             }
         }
+
         else -> {
             validationError.value = null
             true
@@ -209,12 +260,18 @@ private fun validateAnswer(
     }
 }
 
-
-
-
-@Preview
-@Composable
-fun FormScreenPreview() {
-    FormScreen(questions = QuestionRepository.questions) { answers ->
-        println("Submitted answers: $answers") }
-}
+//@Preview
+//@Composable
+//fun FormScreenPreview() {
+//
+//    val context = LocalContext.current
+//    val questions = QuestionRepository.questions
+//
+//    FormScreenWithViewModel(
+//        context = context,
+//        questions = questions
+//    ) { answers, predictionResult ->
+//        println("Submitted answers: $answers")
+//        println("Prediction result: ${predictionResult?.joinToString()}")
+//    }
+//}

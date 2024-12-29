@@ -57,7 +57,7 @@ fun ResultScreen() {
                 ) {
                     Column {
                         Text(
-                            text = "You got type 2 diabetes",
+                            text = "You have 10% chance to get diabetes",
                             fontSize = 36.sp,
                             fontWeight = FontWeight.Medium,
                             fontFamily = tiro_telugu,

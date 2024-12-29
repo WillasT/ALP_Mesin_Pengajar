@@ -14,7 +14,7 @@ import com.example.alp_ml.ui.theme.tiro_telugu
 
 
 @Composable
-fun NavigationButton(text: String, onClick: () -> Unit, modifier: Modifier){
+fun NavigationButton(text: String, onClick: () -> Unit, modifier: Modifier, enabled : Boolean = true){
     Button(
         onClick = onClick,
         modifier = modifier
@@ -22,7 +22,8 @@ fun NavigationButton(text: String, onClick: () -> Unit, modifier: Modifier){
         colors = ButtonDefaults.buttonColors(
             containerColor = button_col,
         ),
-        shape = RoundedCornerShape(16.dp)
+        shape = RoundedCornerShape(16.dp),
+        enabled = enabled
     ) {
         Text(
             text = text,

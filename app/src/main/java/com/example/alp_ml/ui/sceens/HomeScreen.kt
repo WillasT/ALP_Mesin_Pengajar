@@ -15,15 +15,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.alp_ml.ui.components.NavigationButton
 import com.example.alp_ml.ui.theme.heading_col
 import com.example.alp_ml.ui.theme.tiro_telugu
-
 @Composable
-fun HomeScreen () {
-    Column (
+fun HomeScreen(navController: NavController) { // Pass the NavController as a parameter
+    Column(
         modifier = Modifier.fillMaxSize()
-    ){
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -67,7 +68,11 @@ fun HomeScreen () {
                     .align(Alignment.BottomCenter)
                     .padding(bottom = 24.dp)
             ) {
-                NavigationButton(text = "Start", modifier = Modifier, onClick = {})
+                NavigationButton(
+                    text = "Start",
+                    modifier = Modifier,
+                    onClick = { navController.navigate("form") } // Navigate to the form screen
+                )
             }
         }
     }
@@ -75,6 +80,7 @@ fun HomeScreen () {
 
 @Preview
 @Composable
-fun HomeScreenPreview () {
-    HomeScreen()
+fun HomeScreenPreview() {
+    // Use a dummy NavController for preview purposes
+    HomeScreen(navController = rememberNavController())
 }
