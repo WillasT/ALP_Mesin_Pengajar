@@ -1,5 +1,6 @@
-package com.example.alp_ml
+package com.example.alp_ml.ui.sceens
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,20 +14,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.alp_ml.ui.theme.background_col
 import com.example.alp_ml.ui.theme.buttonchoose_col
 import com.example.alp_ml.ui.theme.continue_col
 import com.example.alp_ml.ui.theme.heading_col
 import com.example.alp_ml.ui.theme.tiro_telugu
 
+@SuppressLint("DefaultLocale")
 @Composable
-fun ResultScreen() {
+fun ResultScreen(navController: NavController, result: FloatArray) {
     MaterialTheme {
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = background_col)
+                .background(MaterialTheme.colorScheme.background) // Use theme's background color
         ) {
 
             Column(
@@ -39,13 +43,14 @@ fun ResultScreen() {
                     fontSize = 48.sp,
                     fontWeight = FontWeight.Medium,
                     fontFamily = tiro_telugu,
-                    color = heading_col,
+                    color = MaterialTheme.colorScheme.onBackground, // Adjusted to use theme's onBackground color
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(end = 32.dp),
                     lineHeight = 64.sp
                 )
             }
+
             Column(
                 modifier = Modifier.padding(top = 24.dp)
             ) {
@@ -53,26 +58,43 @@ fun ResultScreen() {
                     modifier = Modifier
                         .clip(shape = RoundedCornerShape(topStart = 48.dp, topEnd = 48.dp))
                         .fillMaxSize(),
-                    colors = CardDefaults.cardColors(containerColor = buttonchoose_col)
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary) // Adjusted to use theme's secondary color
                 ) {
                     Column {
                         Text(
-                            text = "You have 10% chance to get diabetes",
+                            text = "${String.format("%.2f", result[1] * 100)}% chance of Diabetes",
                             fontSize = 36.sp,
                             fontWeight = FontWeight.Medium,
                             fontFamily = tiro_telugu,
-                            color = Color.White,
+                            color = MaterialTheme.colorScheme.onSecondary, // Adjusted to use theme's onSecondary color
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(start = 64.dp, top = 48.dp),
                             lineHeight = 48.sp
                         )
                         Text(
-                            text = "You may want to seek medical treatments from professionals",
+                            text = when (result[0]) {
+                                2.0f -> "You have\nhigh chance\nof diabetes"
+                                else -> "You have\nlow chance\nof diabetes"
+                            },
+                            fontSize = 36.sp,
+                            fontWeight = FontWeight.Medium,
+                            fontFamily = tiro_telugu,
+                            color = MaterialTheme.colorScheme.onSecondary, // Adjusted to use theme's onSecondary color
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 64.dp, top = 48.dp),
+                            lineHeight = 48.sp
+                        )
+                        Text(
+                            text = when (result[0]) {
+                                2.0f -> "You may want to seek medical treatments from professionals"
+                                else -> "Keep yourself healthy"
+                            },
                             fontSize = 15.sp,
                             fontWeight = FontWeight.Medium,
                             fontFamily = tiro_telugu,
-                            color = Color.White,
+                            color = MaterialTheme.colorScheme.onSecondary, // Adjusted to use theme's onSecondary color
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(start = 64.dp, end = 96.dp),
@@ -86,13 +108,13 @@ fun ResultScreen() {
                             .fillMaxSize()
                     ) {
                         Button(
-                            onClick = { /* Handle next action */ },
+                            onClick = { navController.navigate("home") },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(64.dp)
                                 .padding(horizontal = 64.dp),
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = continue_col,
+                                containerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f) , // Adjusted to use theme's primary color
                             ),
                             shape = RoundedCornerShape(16.dp) // Set the desired corner radius
                         ) {
@@ -100,7 +122,7 @@ fun ResultScreen() {
                                 text = "Continue",
                                 fontFamily = tiro_telugu,
                                 fontSize = 20.sp,
-                                color = buttonchoose_col
+                                color = MaterialTheme.colorScheme.onPrimary // Adjusted to use theme's onPrimary color
                             )
                         }
                     }
@@ -110,8 +132,12 @@ fun ResultScreen() {
     }
 }
 
+
 @Preview(showBackground = true)
 @Composable
 fun ResultScreenPreview() {
-    ResultScreen()
+    ResultScreen(
+        navController = rememberNavController(),
+        result = floatArrayOf(2.0f)
+    )
 }
