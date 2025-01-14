@@ -13,6 +13,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
@@ -22,10 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.alp_ml.ui.theme.buttonchoose_col
-import com.example.alp_ml.ui.theme.buttonchoosed_col
-import com.example.alp_ml.ui.theme.textfield_col
-import com.example.alp_ml.ui.theme.textfieldborder_col
 import com.example.alp_ml.ui.theme.tiro_telugu
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,7 +36,7 @@ fun DecimalInput(
     Column(
         modifier = Modifier
             .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally // Aligning content horizontally center
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         OutlinedTextField(
             value = value,
@@ -54,12 +51,13 @@ fun DecimalInput(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
             shape = RoundedCornerShape(12.dp),
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = textfieldborder_col,
-                unfocusedBorderColor = textfieldborder_col,
-                containerColor = textfield_col
+                focusedBorderColor = MaterialTheme.colorScheme.primary,
+                unfocusedBorderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                textColor = MaterialTheme.colorScheme.onSurfaceVariant,
             ),
-            label = label?.let { { Text(it) } },
-            placeholder = placeholder?.let { { Text(it) } }
+            label = label?.let { { Text(it, color = MaterialTheme.colorScheme.onSurfaceVariant) } },
+            placeholder = placeholder?.let { { Text(it, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)) } }
         )
     }
 }
@@ -68,6 +66,7 @@ fun DecimalInput(
 fun BooleanInput(
     selectedOption: Boolean,
     onOptionSelected: (Boolean) -> Unit,
+    enabled: Boolean,
     modifier: Modifier = Modifier,
     yesLabel: String = "Yes",
     noLabel: String = "No"
@@ -75,7 +74,7 @@ fun BooleanInput(
     Column(
         modifier = Modifier
             .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally // Aligning content horizontally center
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
             modifier = modifier.fillMaxWidth(),
@@ -88,7 +87,9 @@ fun BooleanInput(
                     .weight(1f),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = if (!selectedOption)
-                        buttonchoosed_col else buttonchoose_col,
+                        if (enabled) MaterialTheme.colorScheme.primary.copy(alpha = 0.9f)
+                        else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
+                    else MaterialTheme.colorScheme.surfaceVariant,
                 ),
                 shape = RoundedCornerShape(16.dp)
             ) {
@@ -96,6 +97,7 @@ fun BooleanInput(
                     text = noLabel,
                     fontFamily = tiro_telugu,
                     fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             }
             Spacer(modifier = Modifier.padding(6.dp))
@@ -106,7 +108,9 @@ fun BooleanInput(
                     .weight(1f),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = if (selectedOption)
-                        buttonchoosed_col else buttonchoose_col,
+                        if (enabled) MaterialTheme.colorScheme.primary.copy(alpha = 0.9f)
+                        else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
+                    else MaterialTheme.colorScheme.surfaceVariant,
                 ),
                 shape = RoundedCornerShape(16.dp)
             ) {
@@ -114,6 +118,7 @@ fun BooleanInput(
                     text = yesLabel,
                     fontFamily = tiro_telugu,
                     fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             }
         }
@@ -125,6 +130,7 @@ fun ScaleInput(
     options: List<String>,
     selectedOption: String?,
     onOptionSelected: (String) -> Unit,
+    enabled: Boolean
 ) {
     Column(
         modifier = Modifier
@@ -144,7 +150,9 @@ fun ScaleInput(
                             .weight(1f),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = if (selectedOption == option)
-                                buttonchoosed_col else buttonchoose_col,
+                                if (enabled) MaterialTheme.colorScheme.primary.copy(alpha = 0.9f)
+                                else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
+                            else MaterialTheme.colorScheme.surfaceVariant,
                         ),
                         shape = RoundedCornerShape(16.dp)
                     ) {
@@ -152,6 +160,7 @@ fun ScaleInput(
                             text = option,
                             fontFamily = tiro_telugu,
                             fontSize = 16.sp,
+                            color = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                     Spacer(modifier = Modifier.width(6.dp))

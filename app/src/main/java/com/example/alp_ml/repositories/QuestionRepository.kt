@@ -25,8 +25,8 @@ object QuestionRepository {
         ),
         Question(
             id = 4,
-            questionText = "What is your BMI?",
-            questionDetail = "Provide your BMI as a number.",
+            questionText = "What is your Weight",
+            questionDetail = "Input your weight in Kilograms (KG)",
             type = Type.NUMBER
         ),
         Question(
@@ -139,6 +139,12 @@ object QuestionRepository {
             id = 21,
             questionText = "What is your annual income?",
             questionDetail = "Provide your income in dollars.",
+            type = Type.NUMBER
+        ),
+        Question(
+            id = 22,
+            questionText = "What is your height?",
+            questionDetail = "Input in Centimeters (CM)",
             type = Type.NUMBER
         )
     )

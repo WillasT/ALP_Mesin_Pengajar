@@ -30,7 +30,7 @@ fun ResultScreen(navController: NavController, result: FloatArray) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = background_col)
+                .background(MaterialTheme.colorScheme.background) // Use theme's background color
         ) {
 
             Column(
@@ -43,13 +43,14 @@ fun ResultScreen(navController: NavController, result: FloatArray) {
                     fontSize = 48.sp,
                     fontWeight = FontWeight.Medium,
                     fontFamily = tiro_telugu,
-                    color = heading_col,
+                    color = MaterialTheme.colorScheme.onBackground, // Adjusted to use theme's onBackground color
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(end = 32.dp),
                     lineHeight = 64.sp
                 )
             }
+
             Column(
                 modifier = Modifier.padding(top = 24.dp)
             ) {
@@ -57,7 +58,7 @@ fun ResultScreen(navController: NavController, result: FloatArray) {
                     modifier = Modifier
                         .clip(shape = RoundedCornerShape(topStart = 48.dp, topEnd = 48.dp))
                         .fillMaxSize(),
-                    colors = CardDefaults.cardColors(containerColor = buttonchoose_col)
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary) // Adjusted to use theme's secondary color
                 ) {
                     Column {
                         Text(
@@ -65,29 +66,35 @@ fun ResultScreen(navController: NavController, result: FloatArray) {
                             fontSize = 36.sp,
                             fontWeight = FontWeight.Medium,
                             fontFamily = tiro_telugu,
-                            color = Color.White,
+                            color = MaterialTheme.colorScheme.onSecondary, // Adjusted to use theme's onSecondary color
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(start = 64.dp, top = 48.dp),
                             lineHeight = 48.sp
                         )
                         Text(
-                            text = when (result[0]) {2.0f->"You have\nhigh chance\nof diabetes"; else -> "You have\nlow chance\nof diabetes"},
+                            text = when (result[0]) {
+                                2.0f -> "You have\nhigh chance\nof diabetes"
+                                else -> "You have\nlow chance\nof diabetes"
+                            },
                             fontSize = 36.sp,
                             fontWeight = FontWeight.Medium,
                             fontFamily = tiro_telugu,
-                            color = Color.White,
+                            color = MaterialTheme.colorScheme.onSecondary, // Adjusted to use theme's onSecondary color
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(start = 64.dp, top = 48.dp),
                             lineHeight = 48.sp
                         )
                         Text(
-                            text = when (result[0]) {2.0f->"You may want to seek medical treatments from professionals"; else -> "Keep yourself healthy"},
+                            text = when (result[0]) {
+                                2.0f -> "You may want to seek medical treatments from professionals"
+                                else -> "Keep yourself healthy"
+                            },
                             fontSize = 15.sp,
                             fontWeight = FontWeight.Medium,
                             fontFamily = tiro_telugu,
-                            color = Color.White,
+                            color = MaterialTheme.colorScheme.onSecondary, // Adjusted to use theme's onSecondary color
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(start = 64.dp, end = 96.dp),
@@ -107,7 +114,7 @@ fun ResultScreen(navController: NavController, result: FloatArray) {
                                 .height(64.dp)
                                 .padding(horizontal = 64.dp),
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = continue_col,
+                                containerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f) , // Adjusted to use theme's primary color
                             ),
                             shape = RoundedCornerShape(16.dp) // Set the desired corner radius
                         ) {
@@ -115,7 +122,7 @@ fun ResultScreen(navController: NavController, result: FloatArray) {
                                 text = "Continue",
                                 fontFamily = tiro_telugu,
                                 fontSize = 20.sp,
-                                color = buttonchoose_col
+                                color = MaterialTheme.colorScheme.onPrimary // Adjusted to use theme's onPrimary color
                             )
                         }
                     }
@@ -124,6 +131,7 @@ fun ResultScreen(navController: NavController, result: FloatArray) {
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable

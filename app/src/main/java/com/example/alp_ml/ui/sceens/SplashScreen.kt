@@ -26,14 +26,14 @@ fun SplashScreen(onTimeout: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF36804F)),
+            .background(MaterialTheme.colorScheme.primary), // Use theme's primary color
         contentAlignment = Alignment.TopStart
     ) {
         Text(
             text = """Diabetes
                 |Test
             """.trimMargin(),
-            color = Color.White,
+            color = MaterialTheme.colorScheme.onPrimary, // Use theme's onPrimary color for text
             style = MaterialTheme.typography.displayLarge,
             fontFamily = tiro_telugu,
             fontWeight = FontWeight.Medium,

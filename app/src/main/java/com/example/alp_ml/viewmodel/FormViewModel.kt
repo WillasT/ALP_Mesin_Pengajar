@@ -81,7 +81,7 @@ class FormViewModel(context: Context) : ViewModel() {
                         1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 17 ->
                             orderedData.add(when (answers[question.id-1]) {"false" ->0f; else -> 1f})
 
-                        4, 15, 16 ->
+                        4, 15, 16, 22 ->
                             orderedData.add((answers[question.id-1] as String).toFloat())
 
                         14 ->
@@ -107,6 +107,12 @@ class FormViewModel(context: Context) : ViewModel() {
                 }
             }
         }
+        Log.d("BMI", "Weight ${orderedData[3]}")
+        Log.d("BMI", "Height ${orderedData[21]}")
+        orderedData[3] = bmiCalculator(orderedData[21],orderedData[3])
+
+        orderedData.removeAt(orderedData.lastIndex)
+
         return orderedData.toFloatArray()
     }
 
@@ -175,5 +181,9 @@ class FormViewModel(context: Context) : ViewModel() {
                 0f // Handle cases where IQR is 0 to avoid division by zero
             }
         }
+    }
+
+    private fun bmiCalculator(height: Float, weight: Float): Float{
+        return weight / ((height/100) * (height/100))
     }
 }

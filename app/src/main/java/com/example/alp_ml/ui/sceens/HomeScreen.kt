@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,14 +22,15 @@ import com.example.alp_ml.ui.components.NavigationButton
 import com.example.alp_ml.ui.theme.heading_col
 import com.example.alp_ml.ui.theme.tiro_telugu
 @Composable
-fun HomeScreen(navController: NavController) { // Pass the NavController as a parameter
+fun HomeScreen(navController: NavController) {
+    // Pass the NavController as a parameter
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFFF9F3E5))
+                .background(MaterialTheme.colorScheme.background) // Adjusted to use theme background color
                 .padding(48.dp)
         ) {
             Column(modifier = Modifier.align(Alignment.TopStart)) {
@@ -41,7 +43,7 @@ fun HomeScreen(navController: NavController) { // Pass the NavController as a pa
                     fontSize = 42.sp,
                     fontWeight = FontWeight.Medium,
                     fontFamily = tiro_telugu,
-                    color = heading_col,
+                    color = MaterialTheme.colorScheme.onBackground, // Adjusted to use theme's onBackground color
                     modifier = Modifier.fillMaxWidth(),
                     lineHeight = 48.sp
                 )
@@ -54,7 +56,7 @@ fun HomeScreen(navController: NavController) { // Pass the NavController as a pa
                     the best result
                     """.trimIndent(),
                     fontSize = 16.sp,
-                    color = heading_col,
+                    color = MaterialTheme.colorScheme.onBackground, // Adjusted to use theme's onBackground color
                     fontFamily = tiro_telugu,
                     modifier = Modifier
                         .padding(vertical = 4.dp)
